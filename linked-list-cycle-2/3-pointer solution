@@ -1,0 +1,55 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if (head == NULL) {
+            return NULL;
+        }
+        // EXPLANATION:
+        // Use walker and runner similar to linked-list-cycle
+        // Let x1 = dist from head to entry of cycle, goa
+        // Let x2 = dist from head to meeting of walker and runner
+        // Let x3 = dist from meeting point to entry of cycle
+        // Then cycle length C = x2+x3
+        // At meeting point, walker travel x1+x2 and runner travel 2*x1+2*x2
+        // so at MP 2*x1+2*x2 = x1+x2+n*C for some n>0 laps around cycle before they meet
+        // --> x1+x2 = n*C = (n-1)C + C = n*C = (n-1)C + x2+x3
+        // --> x1 = (n-1)C +x3
+        // It follows that x1 = x3, ie dist from head to entry = dist from MP to entry, +(n-1) complete cycles 
+        // Therefore, once runner and walker meet, can have third node "entry" begin traversing from head
+        // Have walker and entry 1 step at a time, and once they meet, it means we have found x1=x3
+
+        ListNode* walker {head};  
+        ListNode* runner {head};  
+        ListNode* entry {head};
+        
+        // first determine meeting point
+        // runner will be first to be NULL if no cycle, need not check walker
+        while (runner->next != NULL && runner->next->next != NULL) { 
+            walker = walker->next; // traverse list 1 node at a time
+            runner = runner->next->next; // 2 at a time
+            
+            // if meeting point found, calculate x1 and x3
+            if (walker == runner) {
+                while (walker != entry) {
+                    walker = walker->next;
+                    entry = entry->next;
+                }
+                // once walker=entry, we know that this is the entry
+                return entry;
+            }
+            
+        }
+        
+        // no cycle found, return false
+        return NULL;
+
+    }
+};
