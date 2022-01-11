@@ -1,4 +1,4 @@
 # codingtank
 
-Don't worry, I'm still an ELECTRICAL ENGINEERING.
+Don't worry, I'm still an ELECTRICAL ENGINEER.
 Leetcode practice!
